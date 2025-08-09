@@ -26,13 +26,6 @@
             transform: scale(1.1);
             filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.1)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
         }
-        .node .label {
-            transition: all 0.3s ease-in-out;
-        }
-        .node:hover .label {
-            opacity: 1;
-            transform: translateY(0);
-        }
         .modal {
             transition: opacity 0.3s ease-in-out;
         }
@@ -77,6 +70,56 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .accordion-btn {
+            width: 100%;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            cursor: pointer;
+            padding: 1rem;
+            text-align: left;
+            border: none;
+            border-top: 1px solid #e2e8f0;
+            transition: background-color 0.3s;
+            font-weight: 600;
+            font-size: 1.125rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .accordion-content {
+            padding: 0 1rem;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+        .accordion-btn.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Ensure video iframe is responsive */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 1rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -96,6 +139,26 @@
 
     <!-- Main Content -->
     <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Video Introduction Section -->
+        <div id="video-section" class="mb-8 bg-white rounded-2xl shadow-lg p-6 md:p-10">
+            <h2 class="text-2xl font-bold text-slate-700 text-center mb-4">An Introduction to the Path</h2>
+            <div class="video-container max-w-4xl mx-auto">
+                <!--
+                  INSTRUCTION: To add your video, get the 'embed' code from YouTube or Vimeo.
+                  It will look like an <iframe> tag.
+                  Replace the entire <iframe> tag below with the one you copied.
+                -->
+                <iframe
+                    src="https://www.youtube.com/embed/yYDyA6Zdyts"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
         <div class="bg-white rounded-2xl shadow-lg p-6 md:p-10 mountain-bg overflow-hidden">
             <div class="text-center mb-12">
                 <h2 class="text-2xl font-bold text-slate-700">The Path to Enlightenment</h2>
@@ -131,90 +194,49 @@
     const modalData = {
         foundation: {
             title: "1. The Foundation: Method & Wisdom",
-            rawContent: `Vajrayāna is not a separate path but a specialized branch of Mahāyāna Buddhism. It requires a solid foundation in the core principles that are common to all Mahāyāna paths. The two core principles are Method (Bodhicitta, the aspiration to attain enlightenment for all beings) and Wisdom (the correct view of Emptiness, that all phenomena lack inherent existence). A practitioner needs both "wings" to fly to enlightenment.`,
-            content: `
-                <p class="mb-4">Vajrayāna is not a separate path but a specialized branch of Mahāyāna Buddhism. It requires a solid foundation in the core principles that are common to all Mahāyāna paths.</p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                        <h3 class="font-bold text-lg text-blue-800 flex items-center"><svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>Method (Compassion)</h3>
-                        <p class="mt-2 text-slate-700">This involves cultivating <strong>Bodhicitta</strong>: the profound aspiration to attain full enlightenment for the benefit of all sentient beings.</p>
-                    </div>
-                    <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg">
-                        <h3 class="font-bold text-lg text-purple-800 flex items-center"><svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>Wisdom (Emptiness)</h3>
-                        <p class="mt-2 text-slate-700">This is the correct view of <strong>Emptiness (Śūnyatā)</strong>: the understanding that all phenomena lack inherent, independent existence.</p>
-                    </div>
-                </div>
-            `
+            rawContent: `The foundation of Vajrayāna rests on the two pillars of Mahāyāna: Method and Wisdom. Method is Bodhicitta, the compassionate wish to attain enlightenment for all beings. Wisdom is the understanding of Emptiness (Śūnyatā), the lack of inherent existence in all phenomena. Vajrayāna is considered a swift path because it has unique techniques to unify these two aspects in a single moment of consciousness, whereas in the general Mahāyāna path, they are often cultivated alternately.`,
+            tabs: [
+                { title: "The Two Wings", content: `<p>A practitioner needs two "wings" to fly to enlightenment: Method and Wisdom. They are interdependent. Compassion without wisdom can be misdirected, and wisdom without compassion can lead to a self-centered peace that doesn't benefit others. The entire path is about developing these two in a balanced and unified way.</p>` },
+                { title: "Method: Bodhicitta", content: `<p>Bodhicitta is the altruistic intention to achieve enlightenment for the sake of all sentient beings. It is the driving force of the Mahāyāna path. In Vajrayāna, this motivation is even more intense—an unbearable compassion that seeks the most rapid means to relieve others' suffering, making the practitioner a suitable vessel for these powerful techniques.</p>` },
+                { title: "Wisdom: Emptiness", content: `<p>This is the correct view of reality, understanding that all things are "empty" of existing from their own side, independently. They arise in dependence on causes, conditions, and mental imputation. This wisdom is the ultimate antidote to ignorance, the root of all suffering.</p>` },
+                { title: "Why Vajrayāna is Fast", content: `<p>The key distinction of Vajrayāna is its skillful means to bring Method and Wisdom into a single, non-dual consciousness. While the Sūtra path cultivates them sequentially, Tantra uses techniques like deity yoga to experience the appearance of the deity (Method) and its empty nature (Wisdom) simultaneously.</p>` }
+            ]
         },
         entering: {
             title: "2. Entering the Path: Guru & Empowerment",
-            rawContent: `The Vajrayāna path requires formal entry through a qualified Guru (spiritual mentor) and an Empowerment (Abhiṣeka) ritual. This ritual authorizes the student to engage in a specific tantric practice and comes with Commitments (Samaya), which are ethical restraints that protect the practitioner.`,
-            content: `
-                <p class="mb-4">The Vajrayāna path is not entered into lightly. It requires a formal entry through specific rituals and the guidance of a qualified teacher, ensuring the practitioner is a "suitable vessel."</p>
-                <div class="space-y-4">
-                    <div><h3 class="font-bold text-lg text-slate-800">The Guru (Spiritual Mentor)</h3><p class="mt-1 text-slate-700">A qualified Vajrayāna master is essential. They hold the lineage of the practice and guide the student.</p></div>
-                    <div><h3 class="font-bold text-lg text-slate-800">Empowerment (Abhiṣeka)</h3><p class="mt-1 text-slate-700">This is the formal ritual that "empowers" or authorizes the student to engage in a specific tantric practice, planting the seeds for the realizations of the path.</p></div>
-                    <div><h3 class="font-bold text-lg text-slate-800">Commitments (Samaya)</h3><p class="mt-1 text-slate-700">Receiving an empowerment comes with a pledge to uphold specific ethical restraints and practice commitments.</p></div>
-                </div>
-            `
+            rawContent: `Entry into Vajrayāna is a formal process, not a casual one. It requires a qualified Guru (spiritual mentor) who holds an authentic lineage. The entry point is the Empowerment (Abhiṣeka), a ritual that authorizes the student to practice a specific tantra. This transmission plants the seeds for realization but also entails taking on Commitments (Samaya), which are sacred vows that guide and protect the practice.`,
+            tabs: [
+                { title: "The Guru (Lama)", content: `<p>In Vajrayāna, the spiritual mentor is crucial. They are not just a teacher but a living link to the lineage of the practice, tracing back to the Buddha. The student must examine the guru's qualifications carefully, as this relationship is the foundation for the entire path. The guru transmits the empowerment, gives instructions, and guides the student's practice.</p>` },
+                { title: "Empowerment (Abhiṣeka)", content: `<p>Literally meaning "anointing" or "sprinkling," empowerment is the ritual that formally introduces the student to the mandala of a specific deity. It's a complex process that works on multiple levels to ripen the student's mindstream, purify obstacles, and grant permission to engage in the generation and completion stage practices.</p>` },
+                { title: "Samaya (Commitments)", content: `<p>These are the sacred vows and commitments taken during an empowerment. They are the "life-force" of the practice. They include root vows (e.g., maintaining bodhicitta, respecting the guru) and branch vows related to specific conduct. Upholding samaya is essential for the practice to be safe and effective.</p>` }
+            ]
         },
         ascent: {
             title: "3. The Ascent: The Four Classes of Tantra",
-            rawContent: `Vajrayāna is structured in four progressive classes: Kriyā (Action) Tantra, which emphasizes external rituals. Caryā (Performance) Tantra, which balances external and internal practice. Yoga (Union) Tantra, which emphasizes internal yoga. Anuttarayoga (Highest Yoga) Tantra, the most profound class, with direct methods for achieving enlightenment quickly.`,
-            content: `
-                <p class="mb-4">Vajrayāna is structured in a progressive manner, with four classes or levels of practice. Each class has a different emphasis and method for uniting method and wisdom.</p>
-                <ul class="space-y-3">
-                    <li class="bg-gray-100 p-3 rounded-lg"><strong class="text-gray-800">Kriyā (Action) Tantra:</strong> Emphasizes external rituals and cleanliness.</li>
-                    <li class="bg-blue-100 p-3 rounded-lg"><strong class="text-blue-800">Caryā (Performance) Tantra:</strong> Balances external ritual with internal meditation.</li>
-                    <li class="bg-indigo-100 p-3 rounded-lg"><strong class="text-indigo-800">Yoga (Union) Tantra:</strong> Emphasizes internal yoga and meditation.</li>
-                    <li class="bg-purple-100 p-3 rounded-lg"><strong class="text-purple-800">Anuttarayoga (Highest Yoga) Tantra:</strong> The most profound class, which contains the most direct methods for achieving enlightenment quickly.</li>
-                </ul>
-            `
+            rawContent: `The Vajrayāna path is a gradual ascent through four classes of tantra. Kriyā (Action) and Caryā (Performance) Tantras involve both external rituals and internal meditation. Yoga (Union) Tantra focuses more on internal yoga. Anuttarayoga (Highest Yoga) Tantra is the pinnacle, using the most profound methods to work directly with the subtle body and mind to achieve enlightenment in one lifetime.`,
+            tabs: [
+                { title: "Kriyā & Caryā Tantra", content: `<p>These are the "lower" tantras. <strong>Kriyā (Action) Tantra</strong> emphasizes external activities like cleanliness, ritual offerings, and mantra recitation, with the practitioner viewing the deity as a powerful lord. <strong>Caryā (Performance) Tantra</strong> creates a balance between external actions and internal meditation, relating to the deity more as a friend.</p>` },
+                { title: "Yoga Tantra", content: `<p>This class shifts the focus primarily to internal meditation (yoga). The goal is to unite one's own mind with the mind of the deity through deep concentration and visualization, seeing all phenomena as the pure display of the deity's wisdom.</p>` },
+                { title: "Highest Yoga Tantra", content: `<p>This is the most profound and central class discussed in the book. It is unique because it works directly with the subtle energetic system of the body (channels, winds, and drops) to manifest the most fundamental level of consciousness and use it to realize emptiness. It is considered the swiftest path to Buddhahood.</p>` }
+            ]
         },
         summit: {
             title: "4. The Summit: Highest Yoga Tantra",
-            rawContent: `Highest Yoga Tantra works directly with the subtle body (Channels, Winds, and Drops) to manifest the most fundamental level of consciousness. It has two stages: the Generation Stage, where one visualizes oneself as a deity to purify ordinary attachment, and the Completion Stage, where one works with the subtle energies to manifest the Fundamental Innate Mind of Clear Light.`,
-            content: `
-                <p class="mb-4">Highest Yoga Tantra is distinguished by its direct work with the subtle body and mind to manifest the most fundamental level of consciousness.</p>
-                <div class="bg-slate-50 p-4 rounded-lg mb-6">
-                    <h3 class="font-bold text-lg text-slate-800">The Subtle Body</h3>
-                    <p class="mt-1 text-slate-700">A system of subtle energy consisting of: <strong>Channels (Nāḍī)</strong>, <strong>Winds/Energies (Prāṇa)</strong>, and <strong>Drops/Essences (Bindu)</strong>.</p>
-                </div>
-                <h3 class="font-bold text-lg text-slate-800 mb-2">The Two Stages of Practice:</h3>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
-                        <h4 class="font-semibold text-xl text-green-800">Generation Stage</h4>
-                        <p class="mt-2 text-slate-700">The practitioner visualizes or "generates" themselves as a fully enlightened deity to purify attachment to the ordinary self.</p>
-                    </div>
-                    <div class="bg-violet-50 border-l-4 border-violet-500 p-4 rounded-r-lg">
-                        <h4 class="font-semibold text-xl text-violet-800">Completion Stage</h4>
-                        <p class="mt-2 text-slate-700">Through advanced yoga, the practitioner works with the subtle body to manifest the <strong>Fundamental Innate Mind of Clear Light</strong>.</p>
-                    </div>
-                </div>
-            `
+            rawContent: `Highest Yoga Tantra features a two-stage practice. The Generation Stage involves purifying our perception by visualizing ourselves as a fully enlightened deity within a pure mandala. The Completion Stage uses advanced yogic techniques to manipulate the subtle energies (winds) in our body's channels, leading to the direct experience of the mind's most subtle level, the Clear Light, which is then used to realize emptiness.`,
+            tabs: [
+                { title: "The Subtle Body", content: `<p>This is a key concept in Highest Yoga Tantra. It's an energetic system that is the interface between mind and body, composed of: <ul><li class='ml-4'>• <strong>Channels (Nāḍī):</strong> Pathways for subtle energy.</li><li class='ml-4'>• <strong>Winds (Prāṇa):</strong> The energy currents that flow through the channels. They are the "mount" upon which consciousness rides.</li><li class='ml-4'>• <strong>Drops (Bindu):</strong> Concentrated points of essential energy located at key centers (chakras).</li></ul> By controlling the winds, a practitioner can control their mind at its most subtle levels.</p>` },
+                { title: "Generation Stage", content: `<p>This is a practice of profound imagination. The practitioner meditates on emptiness and then arises from that state in the visualized form of an enlightened deity. This practice powerfully counteracts "ordinary appearance" (seeing things as mundane and solid) and "ordinary grasping" (clinging to a limited, impure self-identity). It is the cause for achieving a Buddha's Form Body.</p>` },
+                { title: "Completion Stage", content: `<p>This is the pinnacle of yogic practice. Using techniques like breath control and internal heat (tummo), the practitioner draws the winds into the central channel. This systematically dissolves coarser levels of consciousness, leading to the manifestation of the <strong>Fundamental Innate Mind of Clear Light</strong>. This is the ultimate level of mind, which is then used to realize emptiness directly.</p>` }
+            ]
         },
         culmination: {
             title: "The Culmination: Union of Bliss & Emptiness",
-            rawContent: `The ultimate point is to use the most subtle mind—the Clear Light, experienced as profound bliss—to realize the ultimate nature of reality—Emptiness. This non-dual wisdom is called Mahāmudrā (the Great Seal). Key realizations include the Illusory Body (a subtle body made of wind) and the Actual Clear Light, which lead to the final State of Union, or full enlightenment.`,
-            content: `
-                <p class="mb-4 text-lg">The ultimate point of the entire path is to use the most subtle and powerful state of mind—the Clear Light—to realize the ultimate nature of reality—Emptiness.</p>
-                <div class="bg-amber-50 border-t-4 border-amber-400 p-6 rounded-b-lg text-center">
-                    <h3 class="text-2xl font-bold text-amber-800">The Great Seal (Mahāmudrā)</h3>
-                    <p class="mt-2 text-slate-700">This is the direct realization of the union of the <strong>Clear Light Mind</strong> (experienced as profound bliss) and its own ultimate nature, <strong>Emptiness</strong>.</p>
-                </div>
-                <div class="mt-6">
-                    <h4 class="font-bold text-lg text-slate-800">Key Realizations on the Path:</h4>
-                    <ul class="list-disc list-inside space-y-2 mt-2 text-slate-700">
-                        <li><strong>Illusory Body:</strong> An actual subtle body, made of the most subtle winds, that the practitioner generates.</li>
-                        <li><strong>Actual Clear Light:</strong> The direct, non-conceptual realization of emptiness by the most subtle mind.</li>
-                        <li><strong>The State of Union:</strong> The final stage where the pure Illusory Body and the Actual Clear Light are unified, resulting in full enlightenment.</li>
-                    </ul>
-                </div>
-                 <div class="mt-6 bg-slate-100 p-4 rounded-lg">
-                    <h4 class="font-semibold text-slate-800">Final Advice from H.H. the Dalai Lama:</h4>
-                    <p class="text-slate-600 italic">"The bodhicitta, this kind heart, is our gurus, our meditational deities, our ḍākinīs, and our protectors... If you consider yourself to be my friend, then I ask you, please, think about these teachings on compassion and wisdom."</p>
-                </div>
-            `
+            rawContent: `The final goal is the non-dual realization of the Clear Light mind (experienced as great bliss) and Emptiness. This is Mahāmudrā, the Great Seal. This state is actualized through stages like the Illusory Body (a body of pure energy) and the Actual Clear Light. Their final unification is Buddhahood, the perfect state of a Buddha's mind (Truth Body) and form (Form Body).`,
+            tabs: [
+                { title: "The Great Seal (Mahāmudrā)", content: `<p>This refers to the ultimate realization of the path. It is the direct, non-dual experience where the subject (the blissful clear light mind) and the object (emptiness) are realized as an inseparable unity. It is the "seal" of reality itself, where all phenomena are seen as the union of appearance and emptiness.</p>` },
+                { title: "Key Realizations", content: `<p>The path culminates in profound states: <ul><li class='ml-4'>• <strong>Illusory Body:</strong> The practitioner actually generates a subtle body made of the most subtle winds, which is the direct cause of a Buddha's Form Body.</li><li class='ml-4'>• <strong>Actual Clear Light:</strong> The direct, non-conceptual realization of emptiness by the most subtle mind, the cause of a Buddha's Truth Body (omniscient mind).</li><li class='ml-4'>• <strong>The State of Union:</strong> The final attainment where the purified Illusory Body and the Actual Clear Light become inseparable. This is full enlightenment.</li></ul></p>` },
+                { title: "The Result", content: `<p>The result is Buddhahood—the complete eradication of all obscurations and the perfection of all positive qualities, such as wisdom and compassion. A Buddha possesses a Truth Body (the omniscient mind eternally absorbed in emptiness) and Form Bodies (which manifest effortlessly and spontaneously to benefit all beings). The entire Vajrayāna path is a skillful and swift method to actualize this result.</p>` }
+            ]
         }
     };
 
@@ -227,6 +249,10 @@
         targetElement.classList.remove('hidden');
         let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
         const payload = { contents: chatHistory };
+        // WARNING: This is a major security risk.
+        // API keys should never be exposed in client-side code.
+        // This is included for demonstration purposes only.
+        // For a production application, this API call should be made from a secure backend server.
         const apiKey = "AIzaSyBv0x-3EdkidLIIhiZiZDCYCMIqPhGilXs";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
         let response;
@@ -265,16 +291,20 @@
     function showModal(id) {
         const data = modalData[id];
         if (!data) return;
-        modalContent.innerHTML = `
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">${data.title}</h2>
-                <button onclick="hideModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <div class="prose max-w-none">${data.content}</div>
-            <div class="mt-8 border-t pt-6">
-                <h3 class="text-lg font-semibold text-center text-slate-700 mb-4">Deepen Your Understanding with AI</h3>
+
+        let mainContentHtml = '';
+        data.tabs.forEach(tab => {
+            mainContentHtml += `
+                <div class="prose max-w-none mb-4">
+                    <h4 class="font-semibold text-lg text-slate-800">${tab.title}</h4>
+                    ${tab.content}
+                </div>
+            `;
+        });
+
+        const aiToolsHtml = `
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-center text-slate-700 mb-4">Deepen Your Understanding</h3>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <button id="explain-btn" class="gemini-btn bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md">✨ Explain Further</button>
                     <button id="meditate-btn" class="gemini-btn bg-purple-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md">✨ Generate Guided Meditation</button>
@@ -282,22 +312,92 @@
                 <div id="gemini-output" class="mt-6 bg-slate-50 p-4 rounded-lg border hidden"></div>
             </div>
         `;
+
+        const qaHtml = `
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-center text-slate-700 mb-4">Interactive Q&A</h3>
+                <p class="text-slate-600 mb-3 text-center">Ask a question about this topic, and the AI will provide an answer.</p>
+                <div class="flex gap-2">
+                    <input type="text" id="qa-input" class="flex-grow border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., What is the purpose of a guru?">
+                    <button id="qa-btn" class="gemini-btn bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md">Ask</button>
+                </div>
+                <div id="qa-output" class="mt-4 bg-slate-50 p-4 rounded-lg border hidden"></div>
+            </div>
+        `;
+
+        modalContent.innerHTML = `
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">${data.title}</h2>
+                <button onclick="hideModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div>
+                ${mainContentHtml}
+            </div>
+            <div class="mt-6 border-t border-slate-200">
+                <button class="accordion-btn">
+                    <span>Explore with AI Tools</span>
+                    <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="py-4">
+                        ${qaHtml}
+                        <div class="border-t my-6 border-slate-200"></div>
+                        ${aiToolsHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+
         modalContainer.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         setTimeout(() => {
             modalContainer.style.opacity = '1';
             modalContent.style.transform = 'scale(1)';
         }, 10);
-        const explainBtn = document.getElementById('explain-btn');
-        const meditateBtn = document.getElementById('meditate-btn');
-        const geminiOutput = document.getElementById('gemini-output');
-        explainBtn.addEventListener('click', () => {
-            const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. Please explain the following concept in a simple and accessible way for someone new to the topic. Focus on the core meaning and its practical relevance. Here is the concept: ${data.rawContent}`;
-            callGemini(prompt, geminiOutput);
+
+        // Event Delegation for all modal interactions
+        modalContent.addEventListener('click', (event) => {
+            const target = event.target;
+            const currentData = data; // Ensure data is in scope
+
+            // Accordion logic
+            const accordionBtn = target.closest('.accordion-btn');
+            if (accordionBtn) {
+                accordionBtn.classList.toggle("active");
+                const panel = accordionBtn.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+                return; // Stop further processing
+            }
+
+            // AI Tools logic
+            const geminiOutput = modalContent.querySelector('#gemini-output');
+            if (target.id === 'explain-btn') {
+                const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. Please explain the following concept in a simple and accessible way for someone new to the topic. Focus on the core meaning and its practical relevance. Here is the concept: ${currentData.rawContent}`;
+                callGemini(prompt, geminiOutput);
+            } else if (target.id === 'meditate-btn') {
+                const prompt = `You are an AI assistant skilled in creating guided meditations. Based on the following Buddhist concept, please generate a short (approx. 150-200 words) guided meditation script. The script should be suitable for a beginner, with clear and simple instructions, starting with a settling-in phrase and ending with a gentle return to awareness. Here is the concept: ${currentData.rawContent}`;
+                callGemini(prompt, geminiOutput);
+            } else if (target.id === 'qa-btn') {
+                const qaInput = modalContent.querySelector('#qa-input');
+                const qaOutput = modalContent.querySelector('#qa-output');
+                const question = qaInput.value;
+                if (question.trim() === '') return;
+                const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. A user is asking a question about a specific topic. Please provide a clear and helpful answer based *only* on the provided context. If the user's question is unrelated to the context, politely state that you can only answer questions about the given topic. Context of the topic: "${currentData.rawContent}". User's question: "${question}"`;
+                callGemini(prompt, qaOutput);
+            }
         });
-        meditateBtn.addEventListener('click', () => {
-            const prompt = `You are an AI assistant skilled in creating guided meditations. Based on the following Buddhist concept, please generate a short (approx. 150-200 words) guided meditation script. The script should be suitable for a beginner, with clear and simple instructions, starting with a settling-in phrase and ending with a gentle return to awareness. Here is the concept: ${data.rawContent}`;
-            callGemini(prompt, geminiOutput);
+
+        // Keydown listener for the Q&A input
+        modalContent.addEventListener('keydown', (event) => {
+            if (event.target.id === 'qa-input' && event.key === 'Enter') {
+                modalContent.querySelector('#qa-btn').click();
+            }
         });
     }
 
@@ -312,28 +412,25 @@
 
     // --- PDF DOWNLOAD LOGIC ---
     function downloadAsPdf() {
-        const originalHeader = document.querySelector('header');
-        const originalMain = document.querySelector('main');
-
-        // 1. Create a temporary printable container
         const printContainer = document.createElement('div');
-        printContainer.style.width = '8.5in'; // Standard letter width
+        printContainer.style.width = '8.5in';
         printContainer.style.padding = '0.5in';
         printContainer.style.boxSizing = 'border-box';
+        printContainer.style.fontFamily = "'Inter', sans-serif";
 
+        // Add Header
+        const headerContent = document.querySelector('header .text-center').cloneNode(true);
+        printContainer.appendChild(headerContent);
 
-        // 2. Clone the header and main content
-        const headerClone = originalHeader.cloneNode(true);
-        const mainClone = originalMain.cloneNode(true);
+        // Add Infographic Image (as a static representation)
+        const mainContent = document.querySelector('main .bg-white').cloneNode(true);
+        // Remove interactive elements from the SVG for cleaner print
+        mainContent.querySelectorAll('.node').forEach(node => {
+            node.removeAttribute('onclick');
+            node.style.cursor = 'default';
+        });
+        printContainer.appendChild(mainContent);
 
-        // Remove the button from the cloned header
-        const btnInClone = headerClone.querySelector('#download-pdf-btn');
-        if(btnInClone) btnInClone.remove();
-
-        printContainer.appendChild(headerClone);
-        printContainer.appendChild(mainClone);
-
-        // 3. Add a section for all modal content
         const modalContentSection = document.createElement('div');
         modalContentSection.innerHTML = '<h2 style="font-size: 24px; font-weight: bold; margin-top: 40px; text-align: center; page-break-before: always;">Detailed Explanations</h2>';
 
@@ -347,15 +444,22 @@
             section.style.borderRadius = '8px';
             section.style.backgroundColor = '#f8fafc';
 
+            let tabsHtml = '';
+            data.tabs.forEach(tab => {
+                tabsHtml += `
+                    <h4 style="font-size: 18px; font-weight: 600; margin-top: 15px; margin-bottom: 5px; color: #334155; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px;">${tab.title}</h4>
+                    <div style="color: #475569; font-size: 16px; line-height: 1.6;">${tab.content}</div>
+                `;
+            });
+
             section.innerHTML = `
                 <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #1e293b;">${data.title}</h3>
-                <div style="color: #475569; font-size: 16px; line-height: 1.6;">${data.content}</div>
+                ${tabsHtml}
             `;
             modalContentSection.appendChild(section);
         }
         printContainer.appendChild(modalContentSection);
 
-        // 4. Append the container off-screen to render it
         printContainer.style.position = 'absolute';
         printContainer.style.left = '-9999px';
         document.body.appendChild(printContainer);
@@ -368,7 +472,6 @@
           jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
 
-        // 5. Generate PDF from the temporary container
         html2pdf().from(printContainer).set(opt).save().then(() => {
             document.body.removeChild(printContainer);
         }).catch(err => {
@@ -380,9 +483,7 @@
     // --- EVENT LISTENERS ---
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('download-pdf-btn');
-        if (btn) {
-            btn.addEventListener('click', downloadAsPdf);
-        }
+        if (btn) btn.addEventListener('click', downloadAsPdf);
     });
 
     window.addEventListener('keydown', (e) => {
