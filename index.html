@@ -372,9 +372,9 @@
         }
 
         // Event listeners for AI Tools
-        const explainBtn = document.getElementById('explain-btn');
-        const meditateBtn = document.getElementById('meditate-btn');
-        const geminiOutput = document.getElementById('gemini-output');
+        const explainBtn = modalContent.querySelector('#explain-btn');
+        const meditateBtn = modalContent.querySelector('#meditate-btn');
+        const geminiOutput = modalContent.querySelector('#gemini-output');
         if (explainBtn) {
             explainBtn.addEventListener('click', () => {
                 const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. Please explain the following concept in a simple and accessible way for someone new to the topic. Focus on the core meaning and its practical relevance. Here is the concept: ${data.rawContent}`;
@@ -388,10 +388,10 @@
             });
         }
 
-        // Event listeners for Q&A tab
-        const qaInput = document.getElementById('qa-input');
-        const qaBtn = document.getElementById('qa-btn');
-        const qaOutput = document.getElementById('qa-output');
+        // Event listeners for Q&A
+        const qaInput = modalContent.querySelector('#qa-input');
+        const qaBtn = modalContent.querySelector('#qa-btn');
+        const qaOutput = modalContent.querySelector('#qa-output');
         if (qaBtn) {
             qaBtn.addEventListener('click', () => {
                 const question = qaInput.value;
