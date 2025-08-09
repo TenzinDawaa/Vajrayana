@@ -70,39 +70,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .accordion-btn {
-            width: 100%;
-            background-color: #f1f5f9;
-            color: #1e293b;
-            cursor: pointer;
-            padding: 1rem;
-            text-align: left;
-            border: none;
-            border-top: 1px solid #e2e8f0;
-            transition: background-color 0.3s;
-            font-weight: 600;
-            font-size: 1.125rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .accordion-btn:hover {
-            background-color: #e2e8f0;
-        }
-        .accordion-content {
-            padding: 0 1rem;
-            background-color: white;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        .accordion-icon {
-            transition: transform 0.3s;
-        }
-        .accordion-btn.active .accordion-icon {
-            transform: rotate(180deg);
-        }
-
         /* Ensure video iframe is responsive */
         .video-container {
             position: relative;
@@ -335,18 +302,10 @@
             <div>
                 ${mainContentHtml}
             </div>
-            <div class="mt-6 border-t border-slate-200">
-                <button class="accordion-btn">
-                    <span>Explore with AI Tools</span>
-                    <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div class="accordion-content">
-                    <div class="py-4">
-                        ${qaHtml}
-                        <div class="border-t my-6 border-slate-200"></div>
-                        ${aiToolsHtml}
-                    </div>
-                </div>
+            <div class="mt-6 border-t border-slate-200 pt-6">
+                ${qaHtml}
+                <div class="border-t my-6 border-slate-200"></div>
+                ${aiToolsHtml}
             </div>
         `;
 
@@ -361,19 +320,6 @@
         modalContent.addEventListener('click', (event) => {
             const target = event.target;
             const currentData = data; // Ensure data is in scope
-
-            // Accordion logic
-            const accordionBtn = target.closest('.accordion-btn');
-            if (accordionBtn) {
-                accordionBtn.classList.toggle("active");
-                const panel = accordionBtn.nextElementSibling;
-                if (panel.style.maxHeight) {
-                    panel.style.maxHeight = null;
-                } else {
-                    panel.style.maxHeight = panel.scrollHeight + "px";
-                }
-                return; // Stop further processing
-            }
 
             // AI Tools logic
             const geminiOutput = modalContent.querySelector('#gemini-output');
