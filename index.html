@@ -357,54 +357,48 @@
             modalContent.style.transform = 'scale(1)';
         }, 10);
 
-        // Accordion logic
-        const accBtn = modalContent.querySelector(".accordion-btn");
-        if (accBtn) {
-            accBtn.addEventListener("click", function() {
-                this.classList.toggle("active");
-                const panel = this.nextElementSibling;
+        // Event Delegation for all modal interactions
+        modalContent.addEventListener('click', (event) => {
+            const target = event.target;
+            const currentData = data; // Ensure data is in scope
+
+            // Accordion logic
+            const accordionBtn = target.closest('.accordion-btn');
+            if (accordionBtn) {
+                accordionBtn.classList.toggle("active");
+                const panel = accordionBtn.nextElementSibling;
                 if (panel.style.maxHeight) {
                     panel.style.maxHeight = null;
                 } else {
                     panel.style.maxHeight = panel.scrollHeight + "px";
                 }
-            });
-        }
+                return; // Stop further processing
+            }
 
-        // Event listeners for AI Tools
-        const explainBtn = modalContent.querySelector('#explain-btn');
-        const meditateBtn = modalContent.querySelector('#meditate-btn');
-        const geminiOutput = modalContent.querySelector('#gemini-output');
-        if (explainBtn) {
-            explainBtn.addEventListener('click', () => {
-                const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. Please explain the following concept in a simple and accessible way for someone new to the topic. Focus on the core meaning and its practical relevance. Here is the concept: ${data.rawContent}`;
+            // AI Tools logic
+            const geminiOutput = modalContent.querySelector('#gemini-output');
+            if (target.id === 'explain-btn') {
+                const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. Please explain the following concept in a simple and accessible way for someone new to the topic. Focus on the core meaning and its practical relevance. Here is the concept: ${currentData.rawContent}`;
                 callGemini(prompt, geminiOutput);
-            });
-        }
-        if (meditateBtn) {
-            meditateBtn.addEventListener('click', () => {
-                const prompt = `You are an AI assistant skilled in creating guided meditations. Based on the following Buddhist concept, please generate a short (approx. 150-200 words) guided meditation script. The script should be suitable for a beginner, with clear and simple instructions, starting with a settling-in phrase and ending with a gentle return to awareness. Here is the concept: ${data.rawContent}`;
+            } else if (target.id === 'meditate-btn') {
+                const prompt = `You are an AI assistant skilled in creating guided meditations. Based on the following Buddhist concept, please generate a short (approx. 150-200 words) guided meditation script. The script should be suitable for a beginner, with clear and simple instructions, starting with a settling-in phrase and ending with a gentle return to awareness. Here is the concept: ${currentData.rawContent}`;
                 callGemini(prompt, geminiOutput);
-            });
-        }
-
-        // Event listeners for Q&A
-        const qaInput = modalContent.querySelector('#qa-input');
-        const qaBtn = modalContent.querySelector('#qa-btn');
-        const qaOutput = modalContent.querySelector('#qa-output');
-        if (qaBtn) {
-            qaBtn.addEventListener('click', () => {
+            } else if (target.id === 'qa-btn') {
+                const qaInput = modalContent.querySelector('#qa-input');
+                const qaOutput = modalContent.querySelector('#qa-output');
                 const question = qaInput.value;
                 if (question.trim() === '') return;
-                const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. A user is asking a question about a specific topic. Please provide a clear and helpful answer based *only* on the provided context. If the user's question is unrelated to the context, politely state that you can only answer questions about the given topic. Context of the topic: "${data.rawContent}". User's question: "${question}"`;
+                const prompt = `You are an AI assistant knowledgeable in Tibetan Buddhism. A user is asking a question about a specific topic. Please provide a clear and helpful answer based *only* on the provided context. If the user's question is unrelated to the context, politely state that you can only answer questions about the given topic. Context of the topic: "${currentData.rawContent}". User's question: "${question}"`;
                 callGemini(prompt, qaOutput);
-            });
-            qaInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    qaBtn.click();
-                }
-            });
-        }
+            }
+        });
+
+        // Keydown listener for the Q&A input
+        modalContent.addEventListener('keydown', (event) => {
+            if (event.target.id === 'qa-input' && event.key === 'Enter') {
+                modalContent.querySelector('#qa-btn').click();
+            }
+        });
     }
 
     function hideModal() {
